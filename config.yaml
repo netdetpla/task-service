@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Config
+clusters:
+- name: "ndp-cluster"
+  cluster:
+    server: "https://192.168.75.131/k8s/clusters/c-d9wdg"
+    certificate-authority-data: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM3akNDQ\
+      WRhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFvTVJJd0VBWURWUVFLRXdsMGFHVXQKY\
+      21GdVkyZ3hFakFRQmdOVkJBTVRDV05oZEhSc1pTMWpZVEFlRncweU1EQXhNRGt3TWpNd05EQmFGd\
+      zB6TURBeApNRFl3TWpNd05EQmFNQ2d4RWpBUUJnTlZCQW9UQ1hSb1pTMXlZVzVqYURFU01CQUdBM\
+      VVFQXhNSlkyRjBkR3hsCkxXTmhNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ\
+      0tDQVFFQXVGWWM3dkxWV3BOMnN6NVYKRXFoeDQzWXBuZkUyR2tlT0ZWeHora3JsOG03ZGNpQWZOc\
+      k80eDFRUEhqZmgxRTlHWDIvcXJITGVrcE95MyszdQo5NE9zNGk4VXlQSXRpT0ZmcGpWTStqQjBqO\
+      HViZXN4SkdES3ArYmZNQWRNTmduT20vNUNOcnhQTXU0RFZYME1PCjNobnk3T2FQS0VBeU8rR1doT\
+      jN1TGNqRHJiWVlHc2dGcldtZVVuVE5mdWZvUnVyNWdLd2Z4YXdkWWc0cXBCMEMKRERsL1huV1pTN\
+      XRzTHo4aHFWYnNDS0U2OFR1d01iYU1QZUtpNjdIbDcyd3pKL2cydk5UbFE2b0w1VWNLcjlTTgpoV\
+      EhCdVEva0h0S2MrSnZRcjhlZUxoOHE2TDBPVzFady9jUGcwemdwdUxKUVNNcTZMNGxWcjZxVFh2T\
+      llOczRVCnptU2Y4d0lEQVFBQm95TXdJVEFPQmdOVkhROEJBZjhFQkFNQ0FxUXdEd1lEVlIwVEFRS\
+      C9CQVV3QXdFQi96QU4KQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBZU5EbXRqTFhhcXVQVG9qa0k3Q\
+      kc2KzNjdDN0Q3RNMnN6WGdoK3ZHTgovYlZjT3BFeXVRUjNPdDNLcWVzR1liaU5ieEpDU1VJNnJtQ\
+      TJTZ0FCU3c2dGQwOHhhaDRmdkFleXhtNGwvSHBzClNYdERTZFZ6Um9iSzdPSzhZRDZQekFONmpBL\
+      2l5NjV5QWRUVGd0T1YwUlVBc2JocVZFQkZrYlp5QXA1Z3lqUEUKekpZTjlqM3RaKzVacVZGWlpHU\
+      m5BTmZOY2EzVmxqd014L1RGRG8xdCt3MXFVUjVzNGk4dnVkemtnTkRqTExrbwpRUWlTU1hLbDhaZ\
+      lFSbE1xMEdXbXV1LzNZaEVsUnBPcWtaU3pnSnFEL1ZnVmE2SUJtbjNCWXJVT2gwVnFtb013Ck5Ie\
+      Dd3QUtQSzlqaFQ3dGs1MjE2bk9uK25qWlIyVm01Z3N0M3BpdUJxcWZxL0E9PQotLS0tLUVORCBDR\
+      VJUSUZJQ0FURS0tLS0t"
+
+users:
+- name: "ndp-cluster"
+  user:
+    token: "kubeconfig-user-qtmmm:jl6svgt7vf6nj4jktwt9dzrtjq49wtnc7hmz9bx8kgwbdhmzlv2hgt"
+
+contexts:
+- name: "ndp-cluster"
+  context:
+    user: "ndp-cluster"
+    cluster: "ndp-cluster"
+
+current-context: "ndp-cluster"
