@@ -37,6 +37,7 @@ tasks {
         mergeServiceFiles()
         manifest {
             attributes(mapOf("Main-Class" to "org.ndp.service.task.MainKt"))
+            attributes(mapOf("Multi-Release" to "true"))
         }
     }
 }
