@@ -26,25 +26,20 @@ object DatabaseHandler {
 
     fun selectImageStatus(imageID: Int) {
         logger.debug("image id: $imageID")
-        val imageName: String
-        val fileName: String
-        val result = Image.select(Image.isLoaded, Image.imageName, Image.fileName)
+        var isLoaded = -1
+        var imageName = ""
+        var fileName = ""
+        Image.select(Image.isLoaded, Image.imageName, Image.fileName)
             .where {
                 Image.id eq imageID
             }
             .limit(0, 1)
-            .onEach {
-                logger.debug("is loaded: ${it[Image.isLoaded]!!}")
-                logger.debug("image name: ${it[Image.imageName]}")
-                logger.debug("file name: ${it[Image.fileName]}")
+            .forEach {
+                isLoaded = it[Image.isLoaded]!!
+                imageName = it[Image.imageName]!!
+                fileName = it[Image.fileName]!!
             }
-            .toList()[0]
-        logger.debug("is loaded: ${result[Image.isLoaded]!!}")
-        logger.debug("image name: ${result[Image.imageName]}")
-        logger.debug("file name: ${result[Image.fileName]}")
-        if (result[Image.isLoaded]!! == 0) {
-            imageName = result[Image.imageName]!!
-            fileName = result[Image.fileName]!!
+        if (isLoaded == 0) {
             DockerHandler.push(imageName, "/image/$fileName")
             Image.update {
                 it.isLoaded to 1
