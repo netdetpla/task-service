@@ -82,7 +82,7 @@ object DatabaseHandler {
             imageID,
             imageName,
             taskTopic,
-            "/yaml$k8sYAML"
+            "/yaml/$k8sYAML"
         )
     }
 }
