@@ -5,6 +5,7 @@ import me.liuwj.ktorm.dsl.*
 import org.ndp.service.task.beans.Image
 import org.ndp.service.task.beans.ImageInfo
 import org.ndp.service.task.beans.Task
+import org.ndp.service.task.utils.Logger.logger
 import java.io.FileReader
 import java.util.*
 
@@ -24,6 +25,7 @@ object DatabaseHandler {
     }
 
     fun selectImageStatus(imageID: Int) {
+        logger.debug("image id: $imageID")
         val imageName: String
         val fileName: String
         val result = Image.select(Image.isLoaded, Image.imageName, Image.fileName)
@@ -32,6 +34,9 @@ object DatabaseHandler {
             }
             .limit(0, 1)
             .toList()[0]
+        logger.debug("is loaded: ${result[Image.isLoaded]!!}")
+        logger.debug("image name: ${result[Image.imageName]}")
+        logger.debug("file name: ${result[Image.fileName]}")
         if (result[Image.isLoaded]!! == 0) {
             imageName = result[Image.imageName]!!
             fileName = result[Image.fileName]!!
