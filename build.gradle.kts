@@ -16,14 +16,12 @@ dependencies {
     implementation("me.liuwj.ktorm:ktorm-core:2.6")
     implementation("me.liuwj.ktorm:ktorm-jackson:2.6")
     implementation("me.liuwj.ktorm:ktorm-support-mysql:2.6")
-    implementation("org.apache.kafka:kafka-clients:2.4.0")
-    implementation("org.apache.kafka:kafka-streams:2.4.0")
+    implementation("io.lettuce:lettuce-core:5.2.1.RELEASE")
     implementation("org.apache.logging.log4j:log4j-api:2.13.0")
     implementation("org.apache.logging.log4j:log4j-core:2.13.0")
-    implementation("org.slf4j:slf4j-log4j12:1.7.30")
     implementation("io.fabric8:kubernetes-client:4.7.0")
     implementation("com.github.docker-java:docker-java:3.1.5")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.squareup.moshi:moshi-kotlin:1.9.2")
 }
 
 tasks {
@@ -32,5 +30,19 @@ tasks {
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+    }
+}
+tasks {
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf("Main-Class" to "org.ndp.service.task.MainKt"))
+        }
+    }
+}
+
+tasks {
+    build {
+        dependsOn(shadowJar)
     }
 }

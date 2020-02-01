@@ -1,12 +1,9 @@
 package org.ndp.service.task
 
 import me.liuwj.ktorm.dsl.*
-import org.ndp.service.task.beans.KafkaTask
+import org.ndp.service.task.beans.MQTask
 import org.ndp.service.task.beans.Task
-import org.ndp.service.task.utils.DatabaseHandler
-import org.ndp.service.task.utils.DockerHandler
-import org.ndp.service.task.utils.KafkaHandler
-import org.ndp.service.task.utils.KubernetesHandler
+import org.ndp.service.task.utils.*
 import java.io.FileReader
 import java.util.*
 
@@ -25,8 +22,8 @@ fun main() {
                     val imageID = it[Task.imageID]!!
                     DatabaseHandler.selectImageStatus(imageID)
                     val imageInfo = DatabaseHandler.selectImageInfo(imageID)
-                    KafkaHandler.produceTask(
-                        KafkaTask(
+                    RedisHandler.produceTask(
+                        MQTask(
                             it[Task.id]!!,
                             (DockerHandler.dockerProperties["registry.url"] as String) + "/" + imageInfo.imageName,
                             it[Task.param]!!
