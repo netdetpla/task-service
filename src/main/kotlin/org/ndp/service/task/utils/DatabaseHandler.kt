@@ -70,7 +70,7 @@ object DatabaseHandler {
             imageID,
             originResult[Image.imageName]!!,
             originResult[Image.taskTopic]!!,
-            originResult[Image.k8sYAML]!!
+            "/yaml${originResult[Image.k8sYAML]!!}"
         )
     }
 }
