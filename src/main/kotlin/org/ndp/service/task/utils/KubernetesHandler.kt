@@ -12,6 +12,7 @@ object KubernetesHandler {
     init {
         val configContent = FileReader("config.yaml").readText()
         val config = Config.fromKubeconfig(configContent)
+        config.namespace = "default"
         k8sClient = DefaultKubernetesClient(config)
     }
 
