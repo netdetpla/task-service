@@ -10,7 +10,7 @@ import java.util.*
 fun main() {
     val settings = Properties()
     settings.load(FileReader("settings.properties"))
-    val parallelNum = settings["parallelNum"] as Int
+    val parallelNum = Integer.parseInt(settings["parallelNum"] as String)
     while (true) {
         val runningTasksCount = DatabaseHandler.selectRunningTaskCount()
         if (runningTasksCount < parallelNum) {
