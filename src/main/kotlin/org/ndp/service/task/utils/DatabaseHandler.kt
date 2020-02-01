@@ -68,14 +68,21 @@ object DatabaseHandler {
     }
 
     fun selectImageInfo(imageID: Int): ImageInfo {
-        val originResult = Image.select(Image.imageName, Image.taskTopic, Image.k8sYAML)
+        var imageName = ""
+        var taskTopic = ""
+        var k8sYAML = ""
+        Image.select(Image.imageName, Image.taskTopic, Image.k8sYAML)
             .where { Image.id eq imageID }
-            .toList()[0]
+            .forEach {
+                imageName = it[Image.imageName]!!
+                taskTopic = it[Image.taskTopic]!!
+                k8sYAML = it[Image.k8sYAML]!!
+            }
         return ImageInfo(
             imageID,
-            originResult[Image.imageName]!!,
-            originResult[Image.taskTopic]!!,
-            "/yaml${originResult[Image.k8sYAML]!!}"
+            imageName,
+            taskTopic,
+            "/yaml$k8sYAML"
         )
     }
 }
