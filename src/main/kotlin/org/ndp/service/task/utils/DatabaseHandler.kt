@@ -33,6 +33,11 @@ object DatabaseHandler {
                 Image.id eq imageID
             }
             .limit(0, 1)
+            .onEach {
+                logger.debug("is loaded: ${it[Image.isLoaded]!!}")
+                logger.debug("image name: ${it[Image.imageName]}")
+                logger.debug("file name: ${it[Image.fileName]}")
+            }
             .toList()[0]
         logger.debug("is loaded: ${result[Image.isLoaded]!!}")
         logger.debug("image name: ${result[Image.imageName]}")
