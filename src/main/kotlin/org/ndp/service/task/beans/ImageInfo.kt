@@ -4,5 +4,5 @@ data class ImageInfo(
     val imageID: Int,
     val imageName: String,
     val taskTopic: String,
-    val K8sYAML: String
+    val rrImageName: String
 )

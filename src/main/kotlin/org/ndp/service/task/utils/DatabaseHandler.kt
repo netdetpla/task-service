@@ -71,19 +71,19 @@ object DatabaseHandler {
     fun selectImageInfo(imageID: Int): ImageInfo {
         var imageName = ""
         var taskTopic = ""
-        var k8sYAML = ""
-        Image.select(Image.imageName, Image.taskTopic, Image.k8sYAML)
+        var rrimageName = ""
+        Image.select(Image.imageName, Image.taskTopic, Image.rrImageName)
             .where { Image.id eq imageID }
             .forEach {
                 imageName = it[Image.imageName]!!
                 taskTopic = it[Image.taskTopic]!!
-                k8sYAML = it[Image.k8sYAML]!!
+                rrimageName = it[Image.rrImageName]!!
             }
         return ImageInfo(
             imageID,
             imageName,
             taskTopic,
-            "/yaml/$k8sYAML"
+            rrimageName
         )
     }
 

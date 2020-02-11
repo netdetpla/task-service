@@ -36,7 +36,7 @@ tasks {
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         mergeServiceFiles()
         manifest {
-            attributes(mapOf("Main-Class" to "org.ndp.service.task.MainKt"))
+            attributes(mapOf("Main-Class" to "org.ndp.service.task.Main"))
             attributes(mapOf("Multi-Release" to "true"))
         }
     }

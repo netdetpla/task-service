@@ -1,0 +1,25 @@
+{
+  "apiVersion": "batch/v1",
+  "kind": "Job",
+  "metadata": {
+    "name": "port-scan-ns"
+  },
+  "spec": {
+    "completions": 10,
+    "parallelism": 10,
+    "template": {
+      "metadata": {
+        "name": "port-scan-ns"
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "port-scan-ns",
+            "image": "192.168.75.130:5000/port-scan-ns"
+          }
+        ],
+        "restartPolicy": "OnFailure"
+      }
+    }
+  }
+}

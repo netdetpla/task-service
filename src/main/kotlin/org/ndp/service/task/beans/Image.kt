@@ -15,5 +15,5 @@ object Image : Table<Nothing>("image") {
     val isLoaded by int("is_loaded")
     val taskTopic by varchar("task_topic")
     val resultTopic by varchar("result_topic")
-    val k8sYAML by varchar("k8s_yaml")
+    val rrImageName by varchar("rr_image_name")
 }
