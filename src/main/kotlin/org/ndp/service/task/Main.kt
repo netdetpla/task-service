@@ -42,7 +42,7 @@ object Main {
             RedisHandler.produceTask(t, imageInfo.taskTopic)
         }
         logger.debug("starting k8s job...")
-        val jobName = k8sJobTemplate.initJob(imageInfo.imageName, limit)
+        val jobName = k8sJobTemplate.initJob(imageInfo.imageName, tasks.size)
         KubernetesHandler.applyJob(k8sJobAdapter.toJson(k8sJobTemplate).byteInputStream())
         return Job(jobName, imageInfo.rrImageName)
     }

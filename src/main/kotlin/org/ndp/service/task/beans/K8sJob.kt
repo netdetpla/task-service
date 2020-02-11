@@ -46,7 +46,7 @@ data class K8sJob(
         logger.debug("init job json...")
         spec.template.metadata.name = name
         spec.template.spec.containers[0].image =
-            Settings.setting["registry.url"] as String + name
+            Settings.setting["registry.url"] as String + "-" + name
         completionsReset(count)
         return jobRename()
     }
