@@ -30,7 +30,7 @@ object KubernetesHandler {
 
     fun getActivePodCountInJob(jobName: String): Int {
         val job = k8sClient.batch().jobs().withName(jobName).get()
-        return job.status.active
+        return job.status.active ?: 0
     }
 
     fun checkJobCompletion(jobName: String): Boolean {
