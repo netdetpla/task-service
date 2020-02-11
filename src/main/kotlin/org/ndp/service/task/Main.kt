@@ -1,38 +1,54 @@
 package org.ndp.service.task
 
-import me.liuwj.ktorm.dsl.*
-import org.ndp.service.task.beans.MQTask
-import org.ndp.service.task.beans.Task
 import org.ndp.service.task.utils.*
-import java.io.FileReader
+import org.ndp.service.task.utils.Logger.logger
 import java.util.*
 
+fun createNewJob(limit: Int) {
+    val imageID = DatabaseHandler.selectImageByFirstWaitingTask()
+    if (imageID == 0) {
+        logger.debug("nothing to do.")
+        return
+    }
+    val imageInfo = DatabaseHandler.selectImageInfo(imageID)
+    val tasks = DatabaseHandler.selectWaitingTasks(limit, imageID)
+    logger.debug("new tasks: ${tasks.size}")
+    logger.debug("producing task message...")
+    for (t in tasks) {
+        RedisHandler.produceTask(t, imageInfo.K8sYAML)
+    }
+    logger.debug("starting k8s job...")
+    KubernetesHandler.applyJob(imageInfo.K8sYAML)
+}
+
 fun main() {
-    val settings = Properties()
-    settings.load(FileReader("settings.properties"))
-    val parallelNum = Integer.parseInt(settings["parallelNum"] as String)
+    val parallelNum = Integer.parseInt(Settings.setting["parallelNum"] as String)
+    logger.info("task service started")
+    val jobs = ArrayList<String>()
     while (true) {
-        val runningTasksCount = DatabaseHandler.selectRunningTaskCount()
-        if (runningTasksCount < parallelNum) {
-            val limit = parallelNum - runningTasksCount
-            Task.select(Task.id, Task.imageID, Task.param)
-                .where { Task.taskStatus eq 20000 }
-                .limit(0, limit)
-                .forEach {
-                    val imageID = it[Task.imageID]!!
-                    DatabaseHandler.selectImageStatus(imageID)
-                    val imageInfo = DatabaseHandler.selectImageInfo(imageID)
-                    RedisHandler.produceTask(
-                        MQTask(
-                            it[Task.id]!!,
-                            (DockerHandler.dockerProperties["registry.url"] as String) + "/" + imageInfo.imageName,
-                            it[Task.param]!!
-                        ),
-                        imageInfo.taskTopic
-                    )
-                    KubernetesHandler.applyJob(imageInfo.K8sYAML)
-                }
+        logger.debug("checking active pod count...")
+        var count = 0
+        for (job in jobs) {
+            count += KubernetesHandler.getActivePodCountInJob(job)
         }
+        logger.debug("active pods: $count")
+        if (count < parallelNum) {
+            logger.debug("creating a new job")
+            createNewJob(parallelNum - count)
+        }
+        logger.debug("checking finished jobs...")
+        val finishedTasks = ArrayList<String>()
+        for (j in jobs) {
+            if (KubernetesHandler.checkJobCompletion(j)) {
+                finishedTasks.add(j)
+            }
+        }
+        logger.debug("finished jobs: ${finishedTasks.size}")
+        for (fj in finishedTasks) {
+            jobs.remove(fj)
+            KubernetesHandler.deleteJob(fj)
+        }
+        logger.debug("waiting 60s...")
         Thread.sleep(60000)
     }
 }

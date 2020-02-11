@@ -4,6 +4,7 @@ import me.liuwj.ktorm.database.Database
 import me.liuwj.ktorm.dsl.*
 import org.ndp.service.task.beans.Image
 import org.ndp.service.task.beans.ImageInfo
+import org.ndp.service.task.beans.MQTask
 import org.ndp.service.task.beans.Task
 import org.ndp.service.task.utils.Logger.logger
 import java.io.FileReader
@@ -84,5 +85,50 @@ object DatabaseHandler {
             taskTopic,
             "/yaml/$k8sYAML"
         )
+    }
+
+    fun selectImageByFirstWaitingTask(): Int {
+        val imageIDs = Task.select(Task.imageID)
+            .where { Task.taskStatus eq 20000 }
+            .limit(0, 1)
+            .map { it[Task.imageID]!! }
+            .toList()
+        return if (imageIDs.isEmpty()) {
+            0
+        } else {
+            imageIDs[0]
+        }
+    }
+
+    fun selectWaitingTasks(limit: Int, imageID: Int): List<MQTask> {
+        val tasks = ArrayList<MQTask>()
+        // todo 镜像状态检查
+        val imageInfo = selectImageInfo(imageID)
+        Task.select(Task.id, Task.param)
+            .where { Task.taskStatus eq 20000 }
+            .limit(0, limit)
+            .forEach {
+                tasks.add(
+                    MQTask(
+                        it[Task.id]!!,
+                        (DockerHandler.dockerProperties["registry.url"] as String) + "/" + imageInfo.imageName,
+                        it[Task.param]!!
+                    )
+                )
+            }
+        return tasks
+    }
+
+    fun batchUpdateTaskStatus(tasks: List<Int>, status: Int) {
+        Task.batchUpdate {
+            for (t in tasks) {
+                item {
+                    it.taskStatus to status
+                    where {
+                        Task.id eq t
+                    }
+                }
+            }
+        }
     }
 }
