@@ -1,0 +1,33 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "task-service-deployment",
+    "labels": {
+      "service": "task-service"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "service": "task-service"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "service": "task-service"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "task-service",
+            "image": "192.168.75.130:5000/task-service"
+          }
+        ]
+      }
+    }
+  }
+}

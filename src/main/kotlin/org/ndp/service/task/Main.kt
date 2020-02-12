@@ -44,6 +44,13 @@ object Main {
         logger.debug("starting k8s job...")
         val jobName = k8sJobTemplate.initJob(imageInfo.imageName, tasks.size)
         KubernetesHandler.applyJob(k8sJobAdapter.toJson(k8sJobTemplate).byteInputStream())
+        logger.debug("updating task status...")
+        DatabaseHandler.batchUpdateTaskStatus(
+            tasks.map {
+                it.taskID
+            },
+            20020
+        )
         return Job(jobName, imageInfo.rrImageName)
     }
 
