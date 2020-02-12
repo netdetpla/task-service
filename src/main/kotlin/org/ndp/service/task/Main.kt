@@ -39,6 +39,7 @@ object Main {
         logger.debug("new tasks: ${tasks.size}")
         logger.debug("producing task message...")
         for (t in tasks) {
+            logger.debug("new task id: ${t.taskID}")
             RedisHandler.produceTask(t, imageInfo.taskTopic)
         }
         logger.debug("starting k8s job...")
